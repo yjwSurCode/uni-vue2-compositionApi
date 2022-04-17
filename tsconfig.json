@@ -14,6 +14,7 @@
     "baseUrl": ".",
     "types": [
       "webpack-env",
+      "webpack",
       "@dcloudio/types",
       "miniprogram-api-typings",
       "mini-types"
@@ -30,8 +31,17 @@
       "scripthost"
     ]
   },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/**/*.ts",
+    "tests/**/*.tsx"
+  ],
   "exclude": [
     "node_modules",
+    "src/uni_modules",
+    "src/components/uni-*/**",
     "unpackage",
     "src/**/*.nvue"
   ]

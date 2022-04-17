@@ -2,7 +2,7 @@
 node_modules/
 unpackage/
 dist/
-wxcomponents
+script
 
 # local env files
 .env.local
@@ -17,6 +17,7 @@ yarn-error.log*
 .project
 .idea
 .vscode
+.hbuilderx
 *.suo
 *.ntvs*
 *.njsproj

@@ -1,23 +1,44 @@
 module.exports = {
+  root: true,
+
   env: {
     browser: true,
-    es2021: true,
+    node: true,
+    es6: true,
   },
-  extends: ['plugin:vue/vue3-essential', 'airbnb-base'],
+
+  plugins: ['vue', 'prettier', '@typescript-eslint'],
+
+  extends: [
+    'plugin:vue/recommended',
+    // '@vue/prettier',
+    'prettier/vue',
+    '@vue/typescript',
+    'plugin:@typescript-eslint/recommended',
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
+  ],
+
+  parser: 'vue-eslint-parser',
+
   parserOptions: {
-    ecmaVersion: 12,
+    ecmaVersion: 2020,
     parser: '@typescript-eslint/parser',
     sourceType: 'module',
   },
-  plugins: ['vue', '@typescript-eslint'],
+
   rules: {
-    'no-undef': 'off',
-    'no-unused-vars': 'off',
-    'no-param-reassign': 'off',
-    'import/no-unresolved': 'off',
-    'import/extensions': 'off',
-    'import/prefer-default-export': 'off',
-    'global-require': 'off',
-    'import/no-extraneous-dependencies': 'off',
+    'no-console': 'off',
+    'no-debugger': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/ban-ts-comment': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
   },
-};
+}
