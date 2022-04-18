@@ -1,5 +1,5 @@
 // import { ResponseResult } from '@/utils/request/types'
-import dayjs from 'dayjs'
+// import dayjs from 'dayjs'
 
 // 处理所有后端返回的数据
 export function processReturn(res: any) {
@@ -45,22 +45,22 @@ export function isUrl(text: string) {
  */
 export function formatTime(time: number) {
   // 大于前天
-  if (dayjs(time).add(2, 'day').isBefore(dayjs(), 'day')) {
-    return dayjs(time).format('M/D HH:mm')
-  }
-  // 大于昨天
-  if (dayjs(time).add(1, 'day').isBefore(dayjs(), 'day')) {
-    return `前天 ${dayjs(time).format('HH:mm')}`
-  }
-  // 昨天
-  if (dayjs(time).isBefore(dayjs(), 'day')) {
-    return `昨天 ${dayjs(time).format('HH:mm')}`
-  }
+  // if (dayjs(time).add(2, 'day').isBefore(dayjs(), 'day')) {
+  //   return dayjs(time).format('M/D HH:mm')
+  // }
+  // // 大于昨天
+  // if (dayjs(time).add(1, 'day').isBefore(dayjs(), 'day')) {
+  //   return `前天 ${dayjs(time).format('HH:mm')}`
+  // }
+  // // 昨天
+  // if (dayjs(time).isBefore(dayjs(), 'day')) {
+  //   return `昨天 ${dayjs(time).format('HH:mm')}`
+  // }
   // 大于五分钟不显示秒
   // if (new Date().valueOf() > time + 300000) {
   //   return moment(time).format('HH:mm');
   // }
-  return dayjs(time).format('HH:mm')
+  // return dayjs(time).format('HH:mm')
 }
 
 /**

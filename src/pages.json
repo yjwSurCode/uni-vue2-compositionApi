@@ -2,13 +2,22 @@
   "easycom": {
     "autoscan": true,
     "custom": {
-      // uni-ui 规则如下配置
       "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
       "^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
     }
   },
+  //https://uniapp.dcloud.io/collocation/pages.html#pages
   "pages": [
-    //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/home/home",
+      "aliasPath": "/home",
+      "name": "home",
+      "style": {
+        "app-plus": {
+          "softinputMode": "adjustPan"
+        }
+      }
+    },
     {
       "path": "pages/login/login",
       "aliasPath": "/login",
@@ -17,6 +26,49 @@
         "app-plus": {
           "softinputMode": "adjustPan"
         }
+      }
+    },
+    {
+      "path": "pages/login/register",
+      "aliasPath": "/register",
+      "name": "register"
+    },
+    //铅封
+    {
+      "path": "pages/pb/pb",
+      "aliasPath": "/pb",
+      "name": "pb",
+      "style": {
+        "app-plus": {}
+      }
+    },
+    //消息
+    {
+      "path": "pages/msg/msg",
+      "aliasPath": "/msg",
+      "name": "msg",
+      "style": {
+        "app-plus": {}
+      }
+    },
+    //岸电
+    {
+      "path": "pages/device/device",
+      "aliasPath": "/device",
+      "name": "device",
+      "style": {
+        "navigationBarTitleText": "长江海事局",
+        "app-plus": {}
+      }
+    },
+    //我的
+    {
+      "path": "pages/me/me",
+      "aliasPath": "/me",
+      "name": "me",
+      "style": {
+        "navigationBarTitleText": "长江海事局",
+        "app-plus": {}
       }
     },
     {
@@ -35,17 +87,71 @@
       }
     }
   ],
+  "tabBar": {
+    "backgroundColor": "#ffffff",
+    "borderStyle": "#e8e5e5",
+    "selectedColor": "#fe2338",
+    "color": "#8a8a8a",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "/static/image/home.png",
+        "selectedIconPath": "/static/image/home-select.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/pb/pb",
+        "iconPath": "/static/image/pb.png",
+        "selectedIconPath": "/static/image/pb-select.png",
+        "text": "铅封"
+      },
+      {
+        "pagePath": "pages/msg/msg",
+        "iconPath": "/static/image/msg.png",
+        "selectedIconPath": "/static/image/msg-select.png",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/device/device",
+        "iconPath": "/static/image/device.png",
+        "selectedIconPath": "/static/image/device-select.png",
+        "text": "岸电"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "iconPath": "/static/image/me.png",
+        "selectedIconPath": "/static/image/me-select.png",
+        "text": "我的"
+      }
+    ]
+  },
   "globalStyle": {
     "navigationStyle": "custom",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8",
-    "rpxCalcMaxDeviceWidth": 960, // rpx 计算所支持的最大设备宽度，单位 px，默认值为 960
-    "rpxCalcBaseDeviceWidth": 375, // 设备实际宽度超出 rpx 计算所支持的最大宽度时，rpx计算所采用的固定屏幕宽度，单位 px，默认值为 375
+    "rpxCalcMaxDeviceWidth": 960,
+    "rpxCalcBaseDeviceWidth": 375,
     "app-plus": {
       "bounce": "none",
-      "scrollIndicator": "none" // 不显示滚动条
+      "scrollIndicator": "none"
     }
+  },
+  // TODO
+  "condition": {
+    "current": 0,
+    "list": [
+      {
+        "name": "login",
+        "path": "pages/login/login",
+        "query": ""
+      },
+      {
+        "name": "pb",
+        "path": "pages/pb/pb",
+        "query": ""
+      }
+    ]
   }
 }

@@ -94,9 +94,10 @@
     "mp-weixin" : {
         /* 小程序特有相关 */
         "usingComponents" : true,
-        "appid" : "",
+        "appid" : "wxca231317b62adaa1",
         "setting" : {
-            "urlCheck" : false
+            "urlCheck" : false,
+            "minified" : false
         }
     },
     "mp-alipay" : {
@@ -120,7 +121,7 @@
         },
         "router" : {
             "mode" : "hash",
-            "base" : "/boats/"
+            "base" : "/uni-chat/"
         },
         "devServer" : {
             "https" : false

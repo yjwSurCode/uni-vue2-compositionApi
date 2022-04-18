@@ -1,33 +1,49 @@
 <template>
   <view class="login">
-    <form class="login-form">
-      <view class="login-form-item">
-        <input v-model="username" class="input" maxlength="16" placeholder="QQ号/手机号/邮箱" />
-      </view>
-      <view class="login-form-item">
-        <input v-model="password" password maxlength="16" class="input" placeholder="密码" />
-      </view>
-      <view class="uni-btn-v">
-        <button
-          :loading="loginLoading"
-          :disabled="isDisabled"
-          hover-class="login-btn-hover"
-          class="button login-btn"
-          @tap="login"
-        >
-          登录
-        </button>
-        <button
-          :loading="registerLoading"
-          :disabled="isDisabled"
-          hover-class="register-btn-hover"
-          class="button register-btn"
-          @tap="register"
-        >
-          注册
-        </button>
-      </view>
-    </form>
+       <view class="logo">
+      <image class="title-img" src="../../static/image/logo.jpg"></image>
+      <div class="title-text">监控船舶登陆页面</div>
+    </view>
+       <view @click="toRegister">注册2</view>
+    <u-form
+				labelPosition="left"
+				:model="loginModel"
+				:rules="rules"
+				ref="form1"
+		>
+			<u-form-item
+					label="手机号"
+					prop="userInfo.name"
+					borderBottom
+					ref="item1"
+			>
+				<u-input
+						v-model="loginModel.userInfo.name"
+						border="none"
+				></u-input>
+			</u-form-item>
+			<u-form-item
+					label="密码"
+					prop="userInfo.sex"
+					borderBottom
+					@click="showSex = true; hideKeyboard()"
+					ref="item1"
+			>
+				<u-input
+						v-model="loginModel.userInfo.sex"
+						disabled
+						disabledColor="#ffffff"
+						placeholder="请选择性别"
+						border="none"
+				></u-input>
+				<u-icon
+						slot="right"
+						name="arrow-right"
+				></u-icon>
+			</u-form-item>
+		</u-form>
+    <button type="primary" @click="submit('customForm')">提交</button>
+	</view>
   </view>
 </template>
 
@@ -43,6 +59,29 @@ export default defineComponent({
       password: '',
       loginLoading: false,
       registerLoading: false,
+
+      //form
+      rules:{
+				'userInfo.name': {
+					type: 'string',
+					required: true,
+					message: '请填写姓名',
+					trigger: ['blur', 'change']
+				},
+				'userInfo.sex': {
+					type: 'string',
+					max: 1,
+					required: true,
+					message: '请选择男或女',
+					trigger: ['blur', 'change']
+				},
+			},
+      loginModel:{
+				userInfo: {
+					name: 'uView UI',
+					sex: '',
+				},
+			},
     })
 
     // 提交过程中禁用按钮
@@ -59,7 +98,7 @@ export default defineComponent({
       uni.showLoading({
         title: '聊天数据加载中',
       })
-      await store.dispatch('chat/connectSocket')
+      // await store.dispatch('chat/connectSocket')
       uni.hideLoading()
       setTimeout(() => {
         root.$Router.replace({
@@ -89,10 +128,20 @@ export default defineComponent({
       state.registerLoading = true
       const { username, password } = state
       const user = { username, password, createTime: Date.now() }
-      const data = await store.dispatch('app/register', user).finally(() => (state.registerLoading = false))
+      const data = 1111 // = await store.dispatch('app/register', user).finally(() => (state.registerLoading = false))
       if (data) {
         await loadChatData()
       }
+    }
+
+    const toRegister = () => {
+      console.log('1232131')
+
+      setTimeout(() => {
+        root.$Router.replace({
+          name: 'register',
+        })
+      }, 100)
     }
 
     return {
@@ -100,6 +149,7 @@ export default defineComponent({
       isDisabled,
       login,
       register,
+      toRegister,
     }
   },
 })
@@ -107,48 +157,29 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .login ::v-deep {
-  width: 100vw;
-  height: 100vh;
-  padding: rpx(400) rpx(40) rpx(40);
-  background-blend-mode: darken;
-  background-image: url('../../static/bg_login.jpg');
-  background-color: rgba(0, 0, 0, 0.2);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center 0;
-  color: white;
-
-  .login-form {
-    .login-form-item {
-      input {
-        padding: rpx(20) 0;
-        font-size: rpx(38);
-        border-bottom: rpx(1) solid rgba(255, 255, 255, 0.2);
-        .input-placeholder {
-          color: white;
-        }
-      }
-    }
-    .button {
-      margin-top: rpx(30);
-      &::after {
-        border: none;
-      }
-    }
-    .login-btn {
-      color: white;
-      background-color: rgba(24, 180, 237, 0.8);
-      &.login-btn-hover {
-        background-color: rgba(7, 148, 214, 0.8);
-      }
-    }
-    .register-btn {
-      background-color: rgba(255, 255, 255, 0.8);
-      &.register-btn-hover {
-        color: white;
-        background-color: rgba(0, 0, 0, 0.3);
-      }
-    }
+ 
+}
+.logo {
+  height: 400upx;
+  background-color: #0c4498;
+  text-align: center;
+  padding: 50upx;
+  // height: 160upx;
+  // width: 160upx;
+  // display: block;
+  // border-radius: 50%;
+  // margin: 0 auto;
+  // margin-top: 150upx;
+}
+.title {
+  &-img {
+    width: 200upx;
+    height: 200upx;
+  }
+  &-text {
+    font-size: 40upx;
+    margin: 10upx;
+    color: white;
   }
 }
 </style>

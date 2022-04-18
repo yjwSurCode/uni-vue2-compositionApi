@@ -28,7 +28,8 @@ const router = createRouter({
 })
 //全局路由前置守卫
 router.beforeEach((to: totalNextRoute, from: totalNextRoute, next) => {
-  const token = minCache.get('token')
+  // const token = minCache.get('token')
+  const token = 123132
   if (token || to.name == 'login') {
     next()
   } else {
