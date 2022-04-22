@@ -40,7 +40,7 @@ export default {
 }
 .category {
   width: 20%;
-  margin-top: 50upx;
+  margin-top: 20upx;
   display: flex;
   flex-wrap: wrap;
 }
@@ -52,8 +52,8 @@ export default {
   display: flex;
   justify-content: center;
   .imgs {
-    width: 9vw;
-    height: 9vw;
+    width: 6vw;
+    height: 6vw;
   }
 }
 .text {

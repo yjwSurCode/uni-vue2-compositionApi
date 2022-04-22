@@ -4,39 +4,55 @@
     <view class="place"> </view>
     <view>
       <view class="left" @tap="nearAddress">
-        <image src="/static/images/home/weizhi.png"></image>
-        <view>{{ city || '请选择位置' }}</view>
+        <image src="../../static/image/weizhi.png"></image>
+        <view>{{ city || '武汉' }}</view>
       </view>
       <!-- <view class="right" v-if="weatherName && weatherName !== ''">
         <image :src="todyWeather.img"></image>
         <text>{{ weatherName }} /{{ high }}℃</text>
       </view> -->
+      <view class="right">
+        <image :src="todyWeather.img"></image>
+        <text>小雨 / 12 ℃</text>
+      </view>
     </view>
     <!-- 搜索 -->
     <search></search>
     <!-- 轮播图 -->
     <!-- <view class="swiper">
-			<view class="swiper-box">
-				<swiper circular="true" @change="swiperChange" previous-margin="25px" next-margin="25px">
-					<swiper-item v-for="(item, index) in swiperList" :key="index"><image :src="item.img" mode="aspectFill" :class="currentSwiper !== index ?'swiper-item-side':''" lazy-load="true" ></image></swiper-item>
-				</swiper>
-				<view class="indicator">
-          <view v-for="(item, index) in swiperList" :key="index" :class="currentSwiper >= index ? 'on' : 'dots'" :style="'width: ' + (currentSwiper >= index ? 100 / swiperList.length + '%' : '' )"></view>
+      <view class="swiper-box">
+        <swiper circular="true" @change="swiperChange" previous-margin="25px" next-margin="25px">
+          <swiper-item v-for="(item, index) in swiperList" :key="index"
+            ><image
+              :src="item.img"
+              mode="aspectFill"
+              :class="currentSwiper !== index ? 'swiper-item-side' : ''"
+              lazy-load="true"
+            ></image
+          ></swiper-item>
+        </swiper>
+        <view class="indicator">
+          <view
+            v-for="(item, index) in swiperList"
+            :key="index"
+            :class="currentSwiper >= index ? 'on' : 'dots'"
+            :style="'width: ' + (currentSwiper >= index ? 100 / swiperList.length + '%' : '')"
+          ></view>
         </view>
-			</view>
-		</view> -->
+      </view>
+    </view> -->
   </view>
 </template>
 
 <script>
-// import qqmapsdk from '../../../utils/qqmap-wx-jssdk.min'
+import qqmapsdk from '../../utils/sdk.js'
 import search from './search'
-import { hfKey, txMapKey } from '../../utils/keys'
+import { hfKey, txMapKey } from '../../utils/keys.ts'
 export default {
   data() {
     return {
       currentSwiper: 0,
-      city: '武汉',
+      city: '北京',
       weatherData: [
         {
           type: '阴',
@@ -96,10 +112,10 @@ export default {
         },
       ],
       high: '',
-      weatherName: '',
+      weatherName: '冷',
       latitude: '',
       longitude: '',
-      todyWeather: {},
+      todyWeather: { img: '../../static/image/home/weather/xiaoyu.png' },
     }
   },
 
@@ -109,9 +125,11 @@ export default {
   props: {
     colors: {
       type: String,
+      default: 'red',
     },
     locations: {
       type: Object,
+      default: '武汉',
     },
     swiperList: {
       type: Array,
@@ -146,7 +164,6 @@ export default {
        */
       //获取用户位置
       let that = this
-      alert(111)
       uni.getLocation({
         type: 'wgs84',
         geocode: true,
@@ -158,7 +175,6 @@ export default {
           })
         },
         fail: () => {
-          console.log('fail', res)
           that.setData({
             latitude: '',
             longitude: '',
@@ -172,10 +188,10 @@ export default {
     },
 
     getCity() {
-      //   const QQMapWX = new qqmapsdk({
-      //     //腾讯地图  需要用户自己去申请key
-      //     key: txMapKey,
-      //   })
+      const QQMapWX = new qqmapsdk({
+        //腾讯地图  需要用户自己去申请key
+        key: txMapKey,
+      })
       let that = this
       QQMapWX.reverseGeocoder({
         location: {
@@ -207,7 +223,6 @@ export default {
 
     getWeather(la, lo) {
       //获取天气信息
-      console.log('获取天气信息', hfKey, lo, la)
       let url = 'https://free-api.heweather.net/s6/weather/now?key=' + hfKey + '&location=' + lo + ',' + la
       uni.request({
         url: url,
@@ -215,28 +230,25 @@ export default {
         success: (res) => {
           console.log(res)
           let today = res.data.HeWeather6[0].now //获取到今天的天气
-          let h = '30' // today.fl
-          console.log('this', this)
-
-          this.high = '123213'
-          // this.setData({
-          //   high: h,
-          //   //高温
-          //   weatherName: 'name', //today.cond_txt,
-          // })
-          // this.weatherData.forEach((e) => {
-          //   if (e.type == today.cond_txt) {
-          //     this.setData({
-          //       todyWeather: e,
-          //     })
-          //   }
-          // })
+          let h = today.fl
+          this.setData({
+            high: h,
+            //高温
+            weatherName: today.cond_txt,
+          })
+          this.weatherData.forEach((e) => {
+            if (e.type == today.cond_txt) {
+              this.setData({
+                todyWeather: e,
+              })
+            }
+          })
 
           if (this.todyWeather.type == '' || !this.todyWeather.type) {
             let data = this.weatherData[0]
-            // this.setData({
-            //   todyWeather: data,
-            // })
+            this.setData({
+              todyWeather: data,
+            })
           }
         },
         fail: () => {},
@@ -279,7 +291,7 @@ export default {
   padding: 0 3%;
   line-height: 80upx;
   overflow: hidden;
-  height: 150upx;
+  height: 200upx;
   color: #fff;
   position: relative;
 }

@@ -42,6 +42,24 @@
         "app-plus": {}
       }
     },
+    //铅封1
+    {
+      "path": "pages/pb/pb-one",
+      "aliasPath": "/pbone",
+      "name": "pbone",
+      "style": {
+        "app-plus": {}
+      }
+    },
+    //铅封2
+    {
+      "path": "pages/pb/pb-second",
+      "aliasPath": "/pbsecond",
+      "name": "pbsecond",
+      "style": {
+        "app-plus": {}
+      }
+    },
     //消息
     {
       "path": "pages/msg/msg",
@@ -100,7 +118,9 @@
         "text": "首页"
       },
       {
-        "pagePath": "pages/pb/pb",
+        // "pagePath": "pages/pb/pb",
+        // "pagePath": "pages/pb/pb-one",
+        "pagePath": "pages/pb/pb-second",
         "iconPath": "/static/image/pb.png",
         "selectedIconPath": "/static/image/pb-select.png",
         "text": "铅封"
@@ -134,24 +154,24 @@
     "rpxCalcMaxDeviceWidth": 960,
     "rpxCalcBaseDeviceWidth": 375,
     "app-plus": {
-      "bounce": "none",
-      "scrollIndicator": "none"
+      "bounce": "none"
+      // "scrollIndicator": "none"
     }
   },
   // TODO
   "condition": {
     "current": 0,
     "list": [
-      {
-        "name": "login",
-        "path": "pages/login/login",
-        "query": ""
-      },
-      {
-        "name": "pb",
-        "path": "pages/pb/pb",
-        "query": ""
-      }
+      // {
+      //   "name": "login",
+      //   "path": "pages/login/login",
+      //   "query": ""
+      // },
+      // {
+      //   "name": "pb",
+      //   "path": "pages/pb/pb",
+      //   "query": ""
+      // }
     ]
   }
 }

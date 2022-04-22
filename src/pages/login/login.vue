@@ -1,185 +1,495 @@
 <template>
-  <view class="login">
-       <view class="logo">
-      <image class="title-img" src="../../static/image/logo.jpg"></image>
-      <div class="title-text">监控船舶登陆页面</div>
+  <view class="hic-login">
+    <view class="logo">
+      <view class="logo-inner">
+        <slot name="logo">
+          <image v-if="logo" :src="logo" mode="aspectFit"></image>
+          <view class="title">{{ title }}</view>
+        </slot>
+      </view>
     </view>
-       <view @click="toRegister">注册2</view>
-    <u-form
-				labelPosition="left"
-				:model="loginModel"
-				:rules="rules"
-				ref="form1"
-		>
-			<u-form-item
-					label="手机号"
-					prop="userInfo.name"
-					borderBottom
-					ref="item1"
-			>
-				<u-input
-						v-model="loginModel.userInfo.name"
-						border="none"
-				></u-input>
-			</u-form-item>
-			<u-form-item
-					label="密码"
-					prop="userInfo.sex"
-					borderBottom
-					@click="showSex = true; hideKeyboard()"
-					ref="item1"
-			>
-				<u-input
-						v-model="loginModel.userInfo.sex"
-						disabled
-						disabledColor="#ffffff"
-						placeholder="请选择性别"
-						border="none"
-				></u-input>
-				<u-icon
-						slot="right"
-						name="arrow-right"
-				></u-icon>
-			</u-form-item>
-		</u-form>
-    <button type="primary" @click="submit('customForm')">提交</button>
-	</view>
+    <view class="form" :style="{ position: 'relative', top: '-1px' }">
+      <view class="box">
+        <view class="input-wrapper">
+          <!-- <slot name="user"></slot> -->
+          <image class="phone-image" src="../../static/image/phone.svg" />
+          <input
+            type="text"
+            class="input"
+            v-model="loginForm.account"
+            placeholder="请输入您的用户名"
+            @focus="closeHistory"
+          />
+          <view
+            v-if="hasHistory"
+            :class="showHistory ? 'triangle-up' : 'triangle-down'"
+            @click="showHistory = !showHistory"
+          ></view>
+        </view>
+        <view v-show="!showHistory" class="animation-fade">
+          <view class="input-wrapper">
+            <image class="phone-image" src="../../static/image/pwd.svg" />
+            <input type="text" password class="input" v-model="loginForm.password" placeholder="请输入您的密码" />
+          </view>
+          <view class="input-wrapper">
+            <image class="phone-image" src="../../static/image/verify.svg" />
+            <input type="text" password class="input" v-model="loginForm.password" placeholder="请输入您的验证码" />
+          </view>
+          <slot name="tips"></slot>
+          <view class="">
+            <button class="btn round gradient" @click="handleLogin">{{ btnText }}</button>
+            <view class="register-text">去注册</view>
+          </view>
+        </view>
+        <view v-show="showHistory" class="history animation-fade">
+          <view class="input-wrapper" v-for="(item, index) in historyAccount" :key="item.account">
+            <text style="width: 54rpx"></text>
+            <view class="input" @click="changeAccount(index)">{{ item.account }}</view>
+            <text class="close" @click="removeAccount(index)"></text>
+          </view>
+        </view>
+        <!-- v-if="providerList.length > 0" -->
+        <view class="third-login">
+          <view class="text-grey">—— 使用第三方账号登录 ——</view>
+          <view class="provider">
+            <view
+              v-for="item in providerList"
+              :key="item.provider"
+              class="provider-item round"
+              :class="item.color"
+              @click="handleClickProvider(item.provider)"
+            >
+              <text :class="item.icon"></text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="bottom">
+      <slot name="bottom"></slot>
+    </view>
+
+    <!-- #ifdef MP-WEIXIN -->
+    <uni-popup ref="popup" type="bottom">
+      <view class="wx-authorize">
+        <view class="bar">
+          <view class=""></view>
+          <view class="content">微信授权</view>
+          <view class="action close" @click="hidePopup"></view>
+        </view>
+        <view class="describe">
+          <slot name="wx-authorize">
+            <view class="text-xl">{{ title }}</view>
+            <view>申请获得您的公开信息(昵称、头像、地区等)</view>
+          </slot>
+        </view>
+        <view class="operation">
+          <view class="btn cancel" @click="hidePopup">拒绝</view>
+          <view class="btn gradient" @click="getUserProfile">允许</view>
+        </view>
+      </view>
+    </uni-popup>
+    <!-- #endif -->
   </view>
 </template>
 
-<script lang="ts">
-import { defineComponent, reactive, toRefs, computed } from '@vue/composition-api'
-import store from '@/store'
-
-export default defineComponent({
-  name: 'Login',
-  setup(_, { root }) {
-    const state = reactive({
-      username: '',
-      password: '',
-      loginLoading: false,
-      registerLoading: false,
-
-      //form
-      rules:{
-				'userInfo.name': {
-					type: 'string',
-					required: true,
-					message: '请填写姓名',
-					trigger: ['blur', 'change']
-				},
-				'userInfo.sex': {
-					type: 'string',
-					max: 1,
-					required: true,
-					message: '请选择男或女',
-					trigger: ['blur', 'change']
-				},
-			},
-      loginModel:{
-				userInfo: {
-					name: 'uView UI',
-					sex: '',
-				},
-			},
-    })
-
-    // 提交过程中禁用按钮
-    const isDisabled = computed(() => {
-      return state.registerLoading || state.loginLoading
-    })
-
-    // 用户名或密码为空
-    const isEmpty = () => {
-      return state.username.trim() == '' || state.password.trim() == ''
-    }
-    // 登录/注册 成功后加载聊天信息
-    const loadChatData = async () => {
-      uni.showLoading({
-        title: '聊天数据加载中',
-      })
-      // await store.dispatch('chat/connectSocket')
-      uni.hideLoading()
-      setTimeout(() => {
-        root.$Router.replace({
-          name: 'index',
-        })
-      }, 100)
-    }
-
-    // 用户登录
-    const login = async () => {
-      if (isEmpty()) {
-        return uni.showToast({ title: '用户名或密码不能为空', icon: 'none' })
-      }
-      state.loginLoading = true
-      const { username, password } = state
-      const user = { username, password }
-      const data = await store.dispatch('app/login', user).finally(() => (state.loginLoading = false))
-      if (data) {
-        await loadChatData()
-      }
-    }
-    // 注册用户
-    const register = async () => {
-      if (isEmpty()) {
-        return uni.showToast({ title: '用户名或密码不能为空', icon: 'none' })
-      }
-      state.registerLoading = true
-      const { username, password } = state
-      const user = { username, password, createTime: Date.now() }
-      const data = 1111 // = await store.dispatch('app/register', user).finally(() => (state.registerLoading = false))
-      if (data) {
-        await loadChatData()
-      }
-    }
-
-    const toRegister = () => {
-      console.log('1232131')
-
-      setTimeout(() => {
-        root.$Router.replace({
-          name: 'register',
-        })
-      }, 100)
-    }
-
+<script>
+import Service from '../../utils/services.js'
+export default {
+  name: 'HicLogin',
+  props: {
+    logo: {
+      // logo图片src地址
+      type: String,
+      default: '../../static/image/logo.jpg',
+    },
+    title: {
+      // 标题
+      type: String,
+      default: '监控船舶登陆页面',
+    },
+    props: {
+      // 返回的form字段，配置选项
+      type: Object,
+      default: () => ({ account: 'account', password: 'password' }),
+    },
+    btnText: {
+      // 登录按钮文字
+      type: String,
+      default: '登录',
+    },
+    history: {
+      // 历史登录账号列表
+      type: Array,
+      default: () => [],
+    },
+    thirdProps: {
+      // 第三方账号登录
+      type: Array,
+      default: () => [],
+    },
+    wxProfile: {
+      // 微信授权 是否需要通过wx.getUserProfile获取用户信息
+      type: Boolean,
+      default: false,
+    },
+  },
+  data() {
     return {
-      ...toRefs(state),
-      isDisabled,
-      login,
-      register,
-      toRegister,
+      loginForm: {
+        account: '',
+        password: '',
+      },
+      showHistory: false,
+      oauth: [{ provider: '1' }],
     }
   },
-})
+  computed: {
+    hasHistory() {
+      return this.historyAccount.length > 0
+    },
+    historyAccount() {
+      const { account, password } = this.props
+      return this.history.map((item) => {
+        return {
+          account: item[account],
+          password: item[password],
+        }
+      })
+    },
+    providerList() {
+      if (!this.oauth.length || !this.thirdProps.length) {
+        // 没传thirdProps 不显示第三方登录
+        return []
+      }
+      return this.thirdProps.filter((item) => this.oauth.indexOf(item.provider) !== -1)
+    },
+  },
+  created() {
+    this.getProvider()
+  },
+  mounted() {
+    this.changeAccount(0)
+  },
+  methods: {
+    changeAccount(index) {
+      if (!this.hasHistory) return
+      if (index < 0 || index > this.historyAccount.length - 1) return
+      const item = this.historyAccount[index]
+      this.loginForm.account = item.account
+      this.loginForm.password = item.password
+      this.closeHistory()
+    },
+    removeAccount(index) {
+      const item = this.history[index]
+      this.$emit('remove', item, index)
+    },
+    closeHistory() {
+      this.showHistory = false
+    },
+    handleLogin() {
+      const { account, password } = this.props
+      this.$emit('login', {
+        [account]: this.loginForm.account,
+        [password]: this.loginForm.password,
+      })
+    },
+    getProvider() {
+      Service.getProvider().then((provider) => {
+        this.oauth = provider
+      })
+    },
+    handleClickProvider(provider) {
+      // #ifdef MP-WEIXIN
+      if (provider === 'weixin') {
+        if (this.wxProfile) {
+          // 需要通过wx.getUserProfile获取用户头像、昵称、地址...信息
+          this.showPopup()
+          return
+        }
+      }
+      // #endif
+      Service.login(provider).then((res) => {
+        this.$emit('third-login', res)
+      })
+    },
+    // #ifdef MP-WEIXIN
+    showPopup() {
+      this.$refs.popup.open()
+    },
+    hidePopup() {
+      this.$refs.popup.close()
+    },
+    getUserProfile() {
+      wx.getUserProfile({
+        desc: '申请获得您的公开信息',
+        success: (res) => {
+          if (res.errMsg == 'getUserProfile:ok') {
+            const userInfo = res.userInfo
+            Service.login('weixin').then((res) => {
+              this.$emit('wx-login', {
+                code: res.code,
+                userInfo,
+              })
+            })
+          }
+        },
+        fail: (err) => {
+          console.log('获取微信用户信息失败', err)
+        },
+      })
+    },
+    // #endif
+  },
+}
 </script>
 
 <style lang="scss" scoped>
-.login ::v-deep {
- 
+// 背景颜色
+$hic-login-bg-color: #4e9eeb;
+
+// 输入框背景颜色
+$hic-login-input-bg: #f8f8f8;
+
+// 输入框右侧三角颜色
+$hic-login-triangle-color: #5057cb;
+
+// 按钮背景渐变色
+$hic-login-btn-bg-color: linear-gradient(45deg, #0081ff, #1cbbb4);
+
+// 按钮文字颜色
+$hic-login-btn-color: #fff;
+
+// 文字大小
+$font-xl: 19px;
+
+// 文字颜色
+$font-light: #c0c4cc;
+
+@mixin flex($justify: flex-start, $align: center) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+.hic-login {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 }
 .logo {
-  height: 400upx;
-  background-color: #0c4498;
-  text-align: center;
-  padding: 50upx;
-  // height: 160upx;
-  // width: 160upx;
-  // display: block;
-  // border-radius: 50%;
-  // margin: 0 auto;
-  // margin-top: 150upx;
-}
-.title {
-  &-img {
-    width: 200upx;
-    height: 200upx;
+  @include flex(center);
+  height: 25vh;
+  background-color: $hic-login-bg-color;
+  .logo-inner {
+    @include flex();
+    flex-direction: column;
+    image {
+      width: 400rpx;
+      height: 100rpx;
+    }
+    .title {
+      font-size: 50rpx;
+      color: #fff;
+      margin-top: 20px;
+    }
   }
-  &-text {
-    font-size: 40upx;
-    margin: 10upx;
-    color: white;
+}
+.form {
+  padding: 0 30rpx;
+  height: 10vh;
+  border-radius: 0 0 100rpx 100rpx;
+  background-color: $hic-login-bg-color;
+  .box {
+    padding: 100rpx 40rpx 30rpx;
+    border-radius: 40rpx;
+    background-color: #fff;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    .input-wrapper {
+      @include flex(space-between);
+      padding: 20rpx;
+      margin-bottom: 30rpx;
+      background-color: $hic-login-input-bg;
+      .input {
+        flex: 1;
+        padding: 5rpx 20rpx;
+      }
+      $x: 10rpx;
+      $y: 1.73 * $x; // sqrt(3) * 11 = 19
+      .triangle-up,
+      .triangle-down {
+        padding: 0 15rpx;
+        &:after {
+          content: '';
+          display: inline-block;
+          border-left: $x solid transparent;
+          border-right: $x solid transparent;
+          margin-top: $x;
+        }
+      }
+      .triangle-up:after {
+        border-bottom: $y solid $hic-login-triangle-color;
+      }
+      .triangle-down:after {
+        border-top: $y solid $hic-login-triangle-color;
+      }
+    }
+    .tips {
+      padding: 0 30rpx 30rpx;
+      display: flex;
+      justify-content: space-between;
+      checkbox {
+        margin-right: 20rpx;
+      }
+    }
+    .history {
+      max-height: 300rpx;
+      overflow-y: auto;
+      .input-wrapper {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+.third-login {
+  text-align: center;
+  padding-top: 40rpx;
+  .provider {
+    padding-top: 10rpx;
+    @include flex(center);
+    .provider-item {
+      width: 96rpx;
+      height: 96rpx;
+      border: 1rpx solid;
+      margin: 0 20rpx;
+      font-size: 2rem;
+      @include flex(center);
+    }
+  }
+  .third-login-item {
+    padding: 6rpx;
+    border-radius: 50%;
+    box-shadow: 0 0 10rpx 2rpx rgba(0, 0, 0, 0.4);
+  }
+}
+.bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 20rpx;
+  color: $font-light;
+  @include flex(center);
+  flex-direction: column;
+}
+.wx-authorize {
+  .describe {
+    padding: 30rpx 30rpx 70rpx;
+    view {
+      padding-top: 20rpx;
+    }
+  }
+  .operation {
+    @include flex(space-around);
+    .btn {
+      flex: 1;
+      &.cancel {
+        color: $hic-login-bg-color;
+        border-top: 1rpx solid #eee;
+      }
+    }
+  }
+}
+
+.btn {
+  padding: 0 40rpx;
+  height: 80rpx;
+  box-sizing: border-box;
+  overflow: visible;
+  border: 0;
+  text-decoration: none;
+  transform: translate(0rpx, 0rpx);
+  position: relative;
+  @include flex(center);
+  &::after {
+    display: none;
+  }
+}
+.round {
+  border-radius: 5000rpx;
+}
+.gradient {
+  background-image: $hic-login-btn-bg-color;
+  color: $hic-login-btn-color;
+}
+
+.animation-fade {
+  animation-name: fade;
+  animation-duration: 0.8s;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.bar {
+  min-height: 100rpx;
+  @include flex(space-between);
+  .action {
+    position: relative;
+    @include flex(center);
+    &:last-child {
+      margin-right: 30rpx;
+    }
+  }
+}
+
+$width: 30rpx;
+.close {
+  position: relative;
+  width: $width;
+  height: $width;
+  display: inline-block;
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    background-color: #8799a3;
+    left: $width / 2;
+    width: 1px;
+    height: $width;
+  }
+  &::before {
+    transform: rotate(45deg);
+  }
+  &::after {
+    transform: rotate(-45deg);
+  }
+}
+.text-xl {
+  font-size: $font-xl;
+}
+.text-grey {
+  color: $font-light;
+}
+
+.register-text {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px;
+  color: #8799a3;
+}
+.phone {
+  padding: rpx(10) rpx(100);
+
+  &-image {
+    width: rpx(50);
+    height: rpx(50);
   }
 }
 </style>

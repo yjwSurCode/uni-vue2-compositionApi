@@ -1,16 +1,13 @@
 <template>
   <view class="suspension">
-    <view :class="showsever == true ? 'topon' : 'top'">
-      <view class="serve" v-for="(item, index) in iconList" :key="index" @tap="jumpServer(item)">
-        <text :class="['iconfont', item.icon]"></text>
-      </view>
-    </view>
     <view class="bottom">
-      <view class="serve" :style="'background-color:' + colors" @tap="onshowsever">
-        <text class="iconfont icon-fuwu"></text>
-      </view>
       <view class="ontop" :style="'opacity: ' + (scrollShow == true ? '1' : '0')" @tap="goTop">
-        <image src="/static/images/home/TOP.png" class="top_img"></image>
+        <image src="../../static/image/home/tuc.svg" class="top_img"></image>
+        <view>图层</view>
+        <image src="../../static/image/home/cej.svg" class="top_img"></image>
+        <view>测距 </view>
+        <image src="../../static/image/home/fank.svg" class="top_img"></image>
+        <view>反馈</view>
       </view>
     </view>
   </view>
@@ -137,11 +134,14 @@ export default {
 }
 
 .ontop {
-  width: 70upx;
-  height: 70upx;
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 50%;
+  width: 80upx;
+  // height: 70upx;
+  padding: rpx(10) rpx(10) rpx(20) rpx(10);
+  background-color: rgba(255, 255, 255);
+  border-radius: rpx(10);
   transition: all 0.3s;
+  top: rpx(80);
+  position: fixed;
 }
 
 .ontop:active {

@@ -1,9 +1,10 @@
 <template>
 <view class="search">
   <view class="input-box" @tap="jumpSearch">
+    <image src="../../static/image/home/search.png" class="search_img" :style="{marginLeft:'10px'}" ></image>
 		<input placeholder="搜索关键词" class="inputs" disabled placeholder-style="color:#c0c0c0;font-size:24upx;"></input>
 		<view class="icon search">
-      <image src="/static/images/home/search.png" class="search_img"></image>
+      <image src="../../static/image/home/microphone.svg" class="search_img"></image>
     </view>
 	</view>
 </view>

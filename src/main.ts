@@ -12,11 +12,14 @@ Vue.use(router)
 
 Vue.config.productionTip = false
 
+// 使用Vue.prototype.$message.error(res.msg)
 Vue.prototype.$message = {
   error: (msg: string) => uni.showToast({ title: msg }),
   info: (msg: string) => uni.showToast({ title: msg }),
   success: (msg: string) => uni.showToast({ title: msg, icon: 'success' }),
 }
+
+
 import uView from 'uview-ui'
 Vue.use(uView)
 
