@@ -9,7 +9,7 @@
       </view>
     </view>
     <view class="form" :style="{ position: 'relative', top: '-1px' }">
-      <view class="box">
+      <view class="box animation-fade">
         <view class="input-wrapper">
           <!-- <slot name="user"></slot> -->
           <image class="phone-image" src="../../static/image/phone.svg" />
@@ -38,7 +38,7 @@
           <slot name="tips"></slot>
           <view class="">
             <button class="btn round gradient" @click="handleLogin">{{ btnText }}</button>
-            <view class="register-text">去注册</view>
+            <view class="register-text" @click="goRegisterPage">去注册</view>
           </view>
         </view>
         <view v-show="showHistory" class="history animation-fade">
@@ -106,7 +106,7 @@ export default {
     title: {
       // 标题
       type: String,
-      default: '监控船舶登陆页面',
+      default: '欢迎登陆江船零排',
     },
     props: {
       // 返回的form字段，配置选项
@@ -188,11 +188,18 @@ export default {
       this.showHistory = false
     },
     handleLogin() {
-      const { account, password } = this.props
-      this.$emit('login', {
-        [account]: this.loginForm.account,
-        [password]: this.loginForm.password,
-      })
+      // const { account, password } = this.props
+      // this.$emit('login', {
+      //   [account]: this.loginForm.account,
+      //   [password]: this.loginForm.password,
+      // })
+    },
+    goRegisterPage() {
+      setTimeout(() => {
+        this.$Router.replace({
+          name: 'register',
+        })
+      }, 100)
     },
     getProvider() {
       Service.getProvider().then((provider) => {
@@ -285,19 +292,20 @@ $font-light: #c0c4cc;
     flex-direction: column;
     image {
       width: 400rpx;
-      height: 100rpx;
+      height: 160rpx;
     }
     .title {
       font-size: 50rpx;
       color: #fff;
       margin-top: 20px;
+      font-weight: bold;
     }
   }
 }
 .form {
   padding: 0 30rpx;
   height: 10vh;
-  border-radius: 0 0 100rpx 100rpx;
+  border-radius: 0 0 50rpx 50rpx;
   background-color: $hic-login-bg-color;
   .box {
     padding: 100rpx 40rpx 30rpx;

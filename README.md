@@ -13,6 +13,7 @@ file-saver 下载应用 saveAs(downloadLink, 'uni-chat.apk')
 
 uview-ui@1.8.5
 
+
 body {
 overflow: hidden;
 }
@@ -56,6 +57,8 @@ marginBottom:50px
 }
 ]
 }
+
+全局背景颜色：#1296db
 
 微信开发者是 dist！！！！！！
 dist

@@ -125,7 +125,7 @@ export default {
   props: {
     colors: {
       type: String,
-      default: 'red',
+      default: '#1296db', //优先级小于父组件的props
     },
     locations: {
       type: Object,

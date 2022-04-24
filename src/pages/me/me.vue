@@ -119,7 +119,7 @@ page {
   &.status {
     padding-top: var(--status-bar-height);
   }
-  background-color: #f83347;
+  background-color: #1296db;
   width: 100%;
   height: 30vw;
   padding: 0 4%;
@@ -144,7 +144,8 @@ page {
       padding-left: 30upx;
       .username {
         width: 100%;
-        color: #1c4d8d; //#00fff0; //rgb(0, 253, 232);
+        color: #fff; //#00fff0; //rgb(0, 253, 232);
+        font-weight: bold;
         font-size: 40upx;
       }
       .company {
@@ -178,7 +179,7 @@ page {
   background-color: #eee;
 }
 .orders {
-  background-color: #fe2338;
+  background-color: #1296db;
   width: 100%;
   height: 11vw;
   padding: 0 4%;

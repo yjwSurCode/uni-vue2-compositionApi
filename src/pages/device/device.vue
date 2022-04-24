@@ -61,7 +61,7 @@
             </u-field>
           </view>
         </view>
-        <view class="nextStep">下一步</view>
+        <view class="nextStep" @click="handleNextStep">下一步</view>
       </view>
       <!-- 下一步-->
       <view class="init" v-if="pageStatus === 2">
@@ -106,9 +106,9 @@
         </view>
 
         <view class="step">
-          <u-button class="step-btn" type="success" :custom-style="{ backgroundColor: '#ee3d33' }">保存</u-button>
-          <u-button class="step-btn" type="primary" :custom-style="{ backgroundColor: '#ee3d33' }">写卡</u-button>
-          <u-button class="step-btn" type="primary" :custom-style="{ backgroundColor: '#ee3d33' }">上传</u-button>
+          <u-button class="step-btn" type="success" :custom-style="{ backgroundColor: '#1296db' }">保存</u-button>
+          <u-button class="step-btn" type="primary" :custom-style="{ backgroundColor: '#1296db' }">写卡</u-button>
+          <u-button class="step-btn" type="primary" :custom-style="{ backgroundColor: '#1296db' }">上传</u-button>
         </view>
       </view>
     </scroll-view>
@@ -128,7 +128,7 @@ export default defineComponent({
       registerLoading: false,
       show: true,
       content: '东临碣石，以观沧海',
-      background: { backgroundColor: '#ee3d33' }, //#fc1e37
+      background: { background: 'linear-gradient(to right,#0089cd, #00adef)' }, //#fc1e37
       mobile: '',
     })
     const count = ref(0)
@@ -145,6 +145,11 @@ export default defineComponent({
       //     await loadChatData()
     }
 
+    //下一步
+    const handleNextStep = () => {
+      pageStatus.value = 2
+    }
+
     const toRegister = () => {
       root.$Router.replace({
         name: 'index',
@@ -159,6 +164,7 @@ export default defineComponent({
       barTitle,
       toRegister,
       pageStatus,
+      handleNextStep,
     }
   },
 })
@@ -173,11 +179,11 @@ export default defineComponent({
     height: rpx(500);
     width: 100%;
     // background-image: url('../../static/image/bg2.jpg');
-    background-image: url('../../static/image/device-bg.png');
+    background-image: url('../../static/image/pb/pb4.png');
     background-size: 100%;
     background-repeat: no-repeat;
     position: absolute;
-    top: 0px;
+    top: -40px;
   }
 }
 
@@ -186,7 +192,7 @@ export default defineComponent({
   top: rpx(300);
   margin: rpx(50) rpx(50);
   padding: rpx(50);
-  box-shadow: 0px 1px 3px 3px rgba(223, 223, 223, 0.5);
+  box-shadow: 0px 1px 2px 2px rgba(223, 223, 223, 0.5);
   z-index: 999;
   position: relative;
   top: rpx(200);
@@ -199,7 +205,7 @@ export default defineComponent({
 
     &-input {
       color: rgb(0, 0, 0);
-      border: 1px solid #ee3d33;
+      border: 1px solid #1296db; // #ee3d33;
       border-bottom-style: solid;
       border-right-style: none;
       border-top-style: none;
@@ -217,7 +223,7 @@ export default defineComponent({
   margin: rpx(50) rpx(80);
   padding: rpx(20) rpx(50);
   border-radius: rpx(10);
-  background-color: #ee3d33;
+  background-color: #1296db//#ee3d33;
 }
 
 .step {
@@ -246,7 +252,7 @@ export default defineComponent({
   height: 199.7%;
   -webkit-transform: scale(0.5, 0.5);
   transform: scale(0.5, 0.5);
-  border: 0 solid #f00;
+  border: 0 solid #1296db;
   z-index: 2;
 }
 

@@ -8,16 +8,16 @@
   },
   //https://uniapp.dcloud.io/collocation/pages.html#pages
   "pages": [
-    {
-      "path": "pages/home/home",
-      "aliasPath": "/home",
-      "name": "home",
-      "style": {
-        "app-plus": {
-          "softinputMode": "adjustPan"
-        }
-      }
-    },
+    // {
+    //   "path": "pages/home/home",
+    //   "aliasPath": "/home",
+    //   "name": "home",
+    //   "style": {
+    //     "app-plus": {
+    //       "softinputMode": "adjustPan"
+    //     }
+    //   }
+    // },
     {
       "path": "pages/login/login",
       "aliasPath": "/login",
@@ -108,7 +108,7 @@
   "tabBar": {
     "backgroundColor": "#ffffff",
     "borderStyle": "#e8e5e5",
-    "selectedColor": "#fe2338",
+    "selectedColor": "#1296db", //"#fe2338",
     "color": "#8a8a8a",
     "list": [
       {
@@ -118,9 +118,9 @@
         "text": "首页"
       },
       {
-        // "pagePath": "pages/pb/pb",
+        "pagePath": "pages/pb/pb",
         // "pagePath": "pages/pb/pb-one",
-        "pagePath": "pages/pb/pb-second",
+        // "pagePath": "pages/pb/pb-second",
         "iconPath": "/static/image/pb.png",
         "selectedIconPath": "/static/image/pb-select.png",
         "text": "铅封"
